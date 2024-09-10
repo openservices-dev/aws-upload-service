@@ -1,0 +1,54 @@
+services:
+  dynamodb-upload:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-upload
+    ports:
+      - 8000:8000
+    restart: always
+    volumes:
+      - './data:/home/dynamodblocal/data'
+    working_dir: /home/dynamodblocal
+
+  dynamodb-upload-admin: 
+    image: "aaronshaf/dynamodb-admin"
+    container_name: dynamodb-upload-admin
+    depends_on:
+      - dynamodb-upload
+    restart: always
+    ports:
+      - "8001:8001"
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-upload:8000
+      - AWS_REGION=local
+
+  upload_service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.local
+    working_dir: /home/node/aws-upload-service
+    command: sh -c "yarn install && yarn start"
+    depends_on:
+      - dynamodb-upload
+    restart: unless-stopped
+    ports:
+      - 3010:3010
+    env_file:
+      - ./.env.local
+    volumes:
+      - "./:/home/node/aws-upload-service"
+
+  upload_worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.local
+    working_dir: /home/node/aws-upload-service
+    command: sh -c "yarn start:worker"
+    depends_on:
+      - dynamodb-upload
+      - upload_service
+    restart: unless-stopped
+    env_file:
+      - ./.env.local
+    volumes:
+      - "./:/home/node/aws-upload-service"

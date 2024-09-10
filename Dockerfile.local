@@ -1,0 +1,15 @@
+FROM node:22-alpine AS build
+
+RUN apk update && apk upgrade --no-cache
+
+RUN apk add --no-cache ffmpeg
+
+RUN apk add exiftool
+
+RUN corepack enable
+RUN yarn set version berry
+
+RUN mkdir /home/node/aws-upload-service/ && chown -R node:node /home/node/aws-upload-service
+WORKDIR /home/node/aws-upload-service
+
+CMD [ "yarn", "start" ]
