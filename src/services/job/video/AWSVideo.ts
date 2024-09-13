@@ -61,9 +61,9 @@ class AWSVideo implements Services.Job.Strategy {
       },
       StatusUpdateInterval: StatusUpdateInterval.SECONDS_60,
       Priority: 0,
-      // Tags: {
-      //   source: 'worker',
-      // },
+      Tags: {
+        source: 'worker',
+      },
       UserMetadata: {
         fileId: file.id,
       },
