@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import services from '../services';
 
 export default async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<unknown> {

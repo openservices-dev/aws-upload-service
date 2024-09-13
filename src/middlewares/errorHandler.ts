@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import APIError from '../errors/APIError';
 import logger from '../logger';
 

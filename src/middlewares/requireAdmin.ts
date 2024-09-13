@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import tokenService from '../services/token';
 
 export default async function requireAdmin(req: Request, res: Response, next: NextFunction): Promise<unknown> {
