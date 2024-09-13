@@ -6,6 +6,7 @@
 * [CloudFront](https://aws.amazon.com/cloudfront/)
 * [Simple Queue Service](https://aws.amazon.com/sqs/)
 * [Media Convert](https://aws.amazon.com/mediaconvert/)
+* [DynamoDB](https://aws.amazon.com/dynamodb/)
 
 ## Logging and debugging
 
