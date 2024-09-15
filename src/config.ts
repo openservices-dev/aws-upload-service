@@ -77,6 +77,10 @@ export default {
      * 1. DynamoDB
      */
     database: {
+      /**
+       * @type {string}
+       */
+      tableName: process.env.SERVICES_DATABASE_TABLE_NAME,
       accessKeyId: process.env.SERVICES_DATABASE_ACCESS_KEY_ID,
       secretAccessKey: process.env.SERVICES_DATABASE_SECRET_ACCESS_KEY,
       /**
