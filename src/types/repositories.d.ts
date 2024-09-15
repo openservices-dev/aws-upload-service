@@ -32,36 +32,3 @@ interface FileRepository {
 
   delete(id: ID, user: User): Promise<LocalFile | undefined>;
 }
-
-declare namespace ThumbnailRepository {
-  interface CreateParameters {
-    fileId: ID;
-    path: string;
-    mimetype: string;
-    size: number;
-    metadata?: unknown;
-  }
-}
-
-interface ThumbnailRepository {
-  create(params: ThumbnailRepository.CreateParameters): Promise<Thumbnail>;
-
-  get(id: ID): Promise<Thumbnail | undefined>;
-
-  getAll(fileId: ID): Promise<Thumbnail[] | undefined>;
-
-  delete(params: { id?: ID, fileId?: ID }): Promise<void>;
-}
-
-declare namespace MediaConvertJobRepository {
-  interface CreateParameters {
-    id: string;
-    fileId: ID;
-  }
-}
-
-interface MediaConvertJobRepository {
-  create(params: MediaConvertJobRepository.CreateParameters): Promise<{ id: string, fileId: ID }>;
-
-  get(id: string): Promise<{ id: string, fileId: ID } | undefined>;
-}

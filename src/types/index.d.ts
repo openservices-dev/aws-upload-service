@@ -7,14 +7,7 @@ type LocalFile = {
   mimetype: string;
   size: number;
   metadata: unknown;
-}
-
-type Thumbnail = {
-  id: ID;
-  fileId: ID;
-  path: string;
-  mimetype: string;
-  size: number;
+  thumbnails: string[];
 }
 
 type User = {
