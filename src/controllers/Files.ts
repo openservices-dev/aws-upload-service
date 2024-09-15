@@ -22,10 +22,12 @@ class FilesController {
     }
     
     const location = this.cdn.getSignedUrl(file.path);
+    const thumbnails = file.thumbnails.map(path => this.cdn.getUrl(path));
 
     return {
       ...file,
       location,
+      thumbnails,
     };
   }
 
@@ -34,10 +36,12 @@ class FilesController {
 
     const filesWithLocation = await Promise.all(files.map(async (file) => {
       const location = this.cdn.getSignedUrl(file.path);
+      const thumbnails = file.thumbnails.map(path => this.cdn.getUrl(path));
 
       return {
         ...file,
         location,
+        thumbnails,
       };
     }));
 
