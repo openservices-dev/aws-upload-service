@@ -1,9 +1,11 @@
 import express from 'express';
 import multer from 'multer';
+import Joi from 'joi';
 import {
   getFileFilter,
 } from '../utils/functions';
 import optionalAuth from '../middlewares/optionalAuth';
+import { validateRequest  } from '../middlewares/validate';
 import controllers from '../controllers';
 import config from '../config';
 
@@ -43,7 +45,15 @@ const uploadMiddleware = async (req: express.Request, res: express.Response, nex
   }
 };
 
-router.post('/', optionalAuth, uploadMiddleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+const postSchema = Joi.object({
+  file: Joi.object({
+    buffer: Joi.binary().required(),
+    mimetype: Joi.string().required(),
+    size: Joi.number().required(),
+  }).options({ allowUnknown: true }).required(),
+}).options({ allowUnknown: true });
+
+router.post('/', optionalAuth, uploadMiddleware, validateRequest(postSchema), async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try {
     const file = await controllers.Upload.process(req['file'], req['user']);
 

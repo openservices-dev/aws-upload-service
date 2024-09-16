@@ -1,20 +1,13 @@
 import APIError from '../errors/APIError';
 
-interface GetFileResponse extends LocalFile {
-  location: string;
-  playable?: {
-    location: string;
-  };
-}
-
-class FilesController {
+class Files implements FilesController {
   constructor(
     protected fileRepository: FileRepository,
     protected storage: Services.Storage,
     protected cdn: Services.CDN,
   ) {}
 
-  public async getFile(id: ID, user: User = null): Promise<GetFileResponse> {  
+  public async get(id: ID, user: User = null): Promise<FilesController.GetFileResponse> {  
     const file = await this.fileRepository.get(id, user);
 
     if (typeof file === 'undefined') {
@@ -31,7 +24,7 @@ class FilesController {
     };
   }
 
-  public async listFiles(params: any, user: User = null): Promise<GetFileResponse[]> {
+  public async list(params: { ids: ID[] }, user: User = null): Promise<FilesController.GetFileResponse[]> {
     const files = await this.fileRepository.find({ ...params, user });
 
     const filesWithLocation = await Promise.all(files.map(async (file) => {
@@ -48,7 +41,7 @@ class FilesController {
     return filesWithLocation;
   }
 
-  public async deleteFile(id: ID, user: User = null): Promise<LocalFile> {  
+  public async delete(id: ID, user: User = null): Promise<LocalFile> {  
     const file = await this.fileRepository.get(id, user);
 
     if (typeof file === 'undefined') {
@@ -62,4 +55,4 @@ class FilesController {
   }
 }
 
-export default FilesController;
+export default Files;

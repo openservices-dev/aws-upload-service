@@ -1,5 +1,5 @@
 import UploadController from './Upload';
-import FilesController from './Files';
+import Files from './Files';
 import repositories from '../repositories';
 import services from '../services';
 
@@ -8,8 +8,8 @@ const container = {
     return new UploadController(repositories.File, services.Storage, services.Queue, services.Metadata);
   },
 
-  get Files() {
-    return new FilesController(repositories.File, services.Storage, services.CDN);
+  get Files(): FilesController {
+    return new Files(repositories.File, services.Storage, services.CDN);
   },
 };
 
