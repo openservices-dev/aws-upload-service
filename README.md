@@ -8,6 +8,15 @@
 * [Media Convert](https://aws.amazon.com/mediaconvert/)
 * [DynamoDB](https://aws.amazon.com/dynamodb/)
 
+## Routes
+
+| Method | Route | Description | Auth |
+| ------ | ----- | ----------- | ---- |
+| POST | /upload/file | Upload single file | Not required |
+| GET | /upload/file/:id | Get file details | Required |
+| GET | /upload/file/ | List of specified files | Required |
+| DELETE | /upload/file/:id | Deletes single file | Required |
+
 ## Logging and debugging
 
 Enable debug logs:
