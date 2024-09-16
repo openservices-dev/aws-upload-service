@@ -22,8 +22,8 @@ const app = Consumer.create({
     if ('fileId' in body) {
       try {
         const file = await repositories.File.get(body.fileId, null);
-        const values = await services.Job.process(body.mimetype, file);
-        await repositories.File.update(values, { id: file.id });
+        const values = await services.Job.process(body.mimetype, file) as Record<string, string | number | boolean>;
+        await repositories.File.update({ ...values, cacheable: !body.mimetype.startsWith('video') }, { id: file.id });
       } catch (err) {
         logger.error('Could not process file!', { error: err.message, stack: err.stack });
       }
@@ -31,8 +31,8 @@ const app = Consumer.create({
 
     if ('detail' in body && 'jobId' in body.detail) {
       if (body.detail.status === 'COMPLETE') {
-        const updatedFile = await video.AWSVideo.complete(body);
-        await repositories.File.update(updatedFile, { id: updatedFile['id'] });
+        const updatedFile = await video.AWSVideo.complete(body) as Record<string, string | number | boolean>;
+        await repositories.File.update({ ...updatedFile, cacheable: true }, { id: updatedFile['id'] as string });
       }
 
       if (body.detail.status === 'ERROR') {

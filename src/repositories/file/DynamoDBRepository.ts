@@ -34,6 +34,7 @@ class DynamoDBRepository implements FileRepository {
     const item = {
       id: uuidv4(),
       thumbnails: [],
+      cacheable: false,
       ...params,
       createdAt: new Date().toISOString(),
     }
@@ -84,11 +85,12 @@ class DynamoDBRepository implements FileRepository {
     const attributeValues = {};
 
     Object.keys(params).forEach(key => {
-      if (['metadata', 'thumbnails', 'conversions'].includes(key) === false) return;
+      if (['metadata', 'thumbnails', 'conversions', 'cacheable'].includes(key) === false) return;
 
       updateExpression.push(`#${key} = :${key}`);
       attributeNames[`#${key}`] = key;
       if (typeof params[key] === 'string') attributeValues[`:${key}`] = { S: params[key] };
+      if (typeof params[key] === 'boolean') attributeValues[`:${key}`] = { BOOL: params[key] };
       if (typeof params[key] === 'object' && Array.isArray(params[key]) === false) attributeValues[`:${key}`] = { M: marshall(params[key]) };
       if (typeof params[key] === 'object' && Array.isArray(params[key])) attributeValues[`:${key}`] = { L: marshall(params[key]) };
     });

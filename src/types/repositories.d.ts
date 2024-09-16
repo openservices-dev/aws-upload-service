@@ -1,5 +1,6 @@
 declare namespace FileRepository {
   interface CreateParameters {
+    id?: string;
     user?: {
       id: ID;
     }
@@ -7,12 +8,14 @@ declare namespace FileRepository {
     mimetype: string;
     size: number;
     metadata?: unknown;
+    cacheable?: boolean;
   }
 
   interface UpdateParameters {
     metadata?: unknown;
     thumbnails?: string[];
     conversions?: string[];
+    cacheable?: boolean;
   }
 
   interface FindParameters {

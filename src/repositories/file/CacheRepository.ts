@@ -3,17 +3,14 @@ import logger from '../../logger';
 
 class CacheRepository implements FileRepository {
   constructor(
-    protected dynamoDBRepository: FileRepository,
     protected cache: LRUCache<string, unknown>,
   ) {}
 
   public async get(id: ID, user: User = null): Promise<LocalFile | undefined> {
     logger.debug(`${this.constructor.name}.get`, { id, user });
 
-    if (!this.cache.has(id)) {
-      const file = await this.dynamoDBRepository.get(id, user);
-
-      this.cache.set(id, file);
+    if (this.cache.has(id) === false) {
+      return undefined;
     }
 
     return this.cache.get(id) as LocalFile;
@@ -21,12 +18,12 @@ class CacheRepository implements FileRepository {
 
   public async create(params: FileRepository.CreateParameters): Promise<LocalFile> {
     logger.debug(`${this.constructor.name}.create`, params);
-
-    const item = await this.dynamoDBRepository.create(params);
     
-    this.cache.set(item.id, item);
+    if ('cacheable' in params && params.cacheable) {
+      this.cache.set(params.id, params);
+    }
 
-    return item;
+    return params as LocalFile;
   }
 
   public async find(params: FileRepository.FindParameters): Promise<LocalFile[]> {
@@ -36,35 +33,34 @@ class CacheRepository implements FileRepository {
       ids,
     } = params;
 
-    const notCachedItems = ids.filter((id) => !this.cache.has(id));
+    const cachedItems = ids.map((id) => this.cache.get(id) as LocalFile).filter((item) => typeof item !== 'undefined');
 
-    if (notCachedItems.length > 0) {
-      const items = await this.dynamoDBRepository.find({ ids: notCachedItems });
-
-      items.forEach((item) => {
-        this.cache.set(item.id, item);
-      });
-    }
-
-    return ids.map((id) => this.cache.get(id) as LocalFile);
+    return cachedItems;
   }
 
   public async update(params: FileRepository.UpdateParameters, where: { id: ID }): Promise<LocalFile | undefined> {
     logger.debug(`${this.constructor.name}.update`, { params, where });
 
-    this.cache.delete(where.id);
+    const file = this.cache.get(where.id) as LocalFile;
 
-    const item = await this.dynamoDBRepository.update(params, where);
+    const updatedFile = {
+      ...file,
+      ...params,
+    };
 
-    this.cache.set(item.id, item);
+    this.cache.set(where.id, updatedFile);
 
-    return item;
+    return updatedFile;
   }
 
   public async delete(id: ID, user: User = null): Promise<LocalFile | undefined> {
     logger.debug(`${this.constructor.name}.delete`, { id });
 
-    throw new Error('Method not implemented!');
+    const file = this.cache.get(id) as LocalFile;
+
+    this.cache.delete(id);
+
+    return file;
   }
 }
 

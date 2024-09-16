@@ -8,6 +8,7 @@ type LocalFile = {
   size: number;
   metadata: unknown;
   thumbnails: string[];
+  cacheable: boolean;
 }
 
 type User = {
