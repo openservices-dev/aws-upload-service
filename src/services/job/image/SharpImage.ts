@@ -21,7 +21,7 @@ class SharpImage implements Services.Job.Strategy {
       const image = await this.resizeImage(imageBuffer, file.mimetype, width, height);
       const path = `/generated/${thumbnail.width}x${thumbnail.height}/${file.path}`;
 
-      await this.storage.store(image, path, { type: 'thumbnail', source: 'worker', userId: file.userId });
+      await this.storage.store(image, path, { type: 'thumbnail', source: 'worker', userId: file.user?.id });
 
       return path;
     }));

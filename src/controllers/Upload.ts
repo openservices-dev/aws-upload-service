@@ -18,7 +18,7 @@ class UploadController {
     const metadata = await this.getMetadata(uploadedFile);
   
     const file = await this.fileRepository.create({
-      userId: typeof user === 'undefined' ? null : user.id,
+      user: typeof user === 'undefined' ? null : { id: user.id },
       path: path,
       mimetype: uploadedFile.mimetype,
       size: uploadedFile.size,

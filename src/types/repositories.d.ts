@@ -1,6 +1,8 @@
 declare namespace FileRepository {
   interface CreateParameters {
-    userId?: ID;
+    user?: {
+      id: ID;
+    }
     path: string;
     mimetype: string;
     size: number;

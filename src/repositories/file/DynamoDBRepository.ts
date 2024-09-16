@@ -33,6 +33,7 @@ class DynamoDBRepository implements FileRepository {
 
     const item = {
       id: uuidv4(),
+      thumbnails: [],
       ...params,
       createdAt: new Date().toISOString(),
     }

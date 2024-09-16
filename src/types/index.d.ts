@@ -2,7 +2,7 @@ type ID = string;
 
 type LocalFile = {
   id: ID;
-  userId: ID | null;
+  user?: { id: ID } | null;
   path: string;
   mimetype: string;
   size: number;
