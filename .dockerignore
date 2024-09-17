@@ -10,3 +10,5 @@ docker-compose.yml
 .dockerignore
 Dockerfile
 Dockerfile.local
+.yarn/cache
+.yarn/install-state.gz
