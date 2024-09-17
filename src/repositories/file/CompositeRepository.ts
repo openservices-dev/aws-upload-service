@@ -40,17 +40,24 @@ class CompositeRepository implements FileRepository {
     const cachedItems = await this.cacheRepository.find(params);
     const cachedIds = cachedItems.map((item) => item.id);
 
-    const notCachedItems = ids.filter((id) => cachedIds.indexOf(id) === -1);
+    const notCachedIds = ids.filter((id) => cachedIds.indexOf(id) === -1);
+    let notCachedItems = [];
 
-    if (notCachedItems.length > 0) {
-      const items = await this.dynamoDBRepository.find({ ids: notCachedItems });
+    if (notCachedIds.length > 0) {
+      notCachedItems = await this.dynamoDBRepository.find({ ids: notCachedIds });
 
-      items.forEach((item) => {
-        this.cacheRepository.create(item);
-      });
+      await Promise.all(notCachedItems.map(item => this.cacheRepository.create(item)));
     }
 
-    return this.cacheRepository.find(params);
+    return ids.map(id => {
+      const item = cachedItems.find((item) => item.id === id);
+
+      if (typeof item !== 'undefined') {
+        return item;
+      }
+
+      return notCachedItems.find((item) => item.id === id);
+    });
   }
 
   public async update(params: FileRepository.UpdateParameters, where: { id: ID }): Promise<LocalFile | undefined> {
