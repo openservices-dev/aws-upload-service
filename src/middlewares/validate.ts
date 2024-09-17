@@ -18,7 +18,7 @@ export function validateBody(schema: ObjectSchema) {
 
 export function validateQuery(schema: ObjectSchema) {
   return function (req: Request, res: Response, next: NextFunction): void {
-    const { error } = schema.validate(req.params); 
+    const { error } = schema.validate(req.query); 
     const isValid = error == null; 
     
     if (isValid) { 

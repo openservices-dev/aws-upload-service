@@ -27,6 +27,7 @@ router.get('/:id', requireAuth, validateParams(getSchema), async (req: express.R
 
 const listSchema = Joi.object({
   ids: Joi.array().items(Joi.string().guid({ version: 'uuidv4' }).required()).required(),
+  traceId: Joi.string().guid().optional(),
 });
 
 router.get('/', requireAuth, validateQuery(listSchema), async (req: express.Request, res: express.Response, next: express.NextFunction) => {
