@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 .git
+.github
 .gitignore
 README.md
 LICENSE
