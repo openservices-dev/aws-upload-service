@@ -9,8 +9,8 @@ import namespace from './services/cls';
 const app = Consumer.create({
   queueUrl: config.services.queue.url,
   handleMessage: async (message) => {
-    logger.debug('Received message from queue!', { message });
-
+    logger.debug('Received message from queue!', { ...message });
+    
     const body = JSON.parse(message.Body);
 
     if ('traceId' in body) {
@@ -44,11 +44,11 @@ const app = Consumer.create({
 });
 
 app.on('error', (err) => {
-  logger.error(err.message, err);
+  logger.error('Unknown error occured!', { message: err.message, stack: err.stack });
 });
 
 app.on('processing_error', (err) => {
-  logger.error(err.message, err);
+  logger.error('Error while processing message from queue!', { message: err.message, stack: err.stack });
 });
 
 logger.info('Upload worker is running');
