@@ -9,9 +9,9 @@ import namespace from './services/cls';
 const app = Consumer.create({
   queueUrl: config.services.queue.url,
   handleMessage: async (message) => {
-    const body = JSON.parse(message.Body);
+    logger.debug('Received message from queue!', { message });
 
-    logger.debug('Received message from queue!', { body });
+    const body = JSON.parse(message.Body);
 
     if ('traceId' in body) {
       namespace.set('traceId', body.traceId);
