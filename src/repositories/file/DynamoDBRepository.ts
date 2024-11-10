@@ -1,4 +1,11 @@
-import { DynamoDBClient, GetItemCommand, BatchGetItemCommand, PutItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  BatchGetItemCommand,
+  PutItemCommand,
+  UpdateItemCommand,
+  DeleteItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import logger from '../../logger';
@@ -116,9 +123,39 @@ class DynamoDBRepository implements FileRepository {
   }
 
   public async delete(id: ID, user: User = null): Promise<LocalFile | undefined> {
-    logger.debug(`${this.constructor.name}.delete`, { id });
+    logger.debug(`${this.constructor.name}.delete`, { id, user });
 
-    throw new Error('Method not implemented!');
+    const command = new DeleteItemCommand({
+      TableName: this.tableName,
+      Key: {
+        id: {
+          S: id as ID,
+        }
+      },
+      ReturnValues: 'ALL_OLD',
+      ConditionExpression: user === null ? undefined : '#object.#key = :userId',
+      ExpressionAttributeNames: {
+        '#object': 'user',
+        '#key': 'id',
+      },
+      ExpressionAttributeValues: user === null ? undefined : {
+        ':userId': {
+          S: user.id,
+        }
+      }
+    });
+  
+    const result = await this.dynamoDB.send(command);
+
+    logger.debug('result', result);
+
+    if ('Item' in result === false) {
+      return undefined;
+    }
+
+    const item = unmarshall(result.Item as any);
+
+    return item as LocalFile;
   }
 }
 
