@@ -165,12 +165,14 @@ class AWSVideo implements Services.Job.Strategy {
     const conversions = payload.detail.outputGroupDetails
       .filter(outputGroupDetail => outputGroupDetail.outputDetails[0].outputFilePaths[0].endsWith('.mp4'))
       .map(outputGroupDetail => outputGroupDetail.outputDetails[0].outputFilePaths)
-      .flat();
+      .flat()
+      .map(path => path.replace(`s3://${this.bucket}/`, ''));
 
     const thumbnails = payload.detail.outputGroupDetails
       .filter(outputGroupDetail => outputGroupDetail.outputDetails[0].outputFilePaths[0].endsWith('.jpg'))
       .map(outputGroupDetail => outputGroupDetail.outputDetails[0].outputFilePaths)
-      .flat();
+      .flat()
+      .map(path => path.replace(`s3://${this.bucket}/`, ''));
 
     return {
       id,
