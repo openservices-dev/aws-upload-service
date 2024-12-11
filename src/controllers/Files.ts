@@ -16,11 +16,13 @@ class Files implements FilesController {
     
     const location = this.cdn.getSignedUrl(file.path);
     const thumbnails = file.thumbnails.map(path => this.cdn.getUrl(path));
+    const conversions = 'conversions' in file ? file.conversions.map(c => this.cdn.getUrl(c)) : undefined;
 
     return {
       ...file,
       location,
       thumbnails,
+      conversions,
     };
   }
 
@@ -30,11 +32,13 @@ class Files implements FilesController {
     const filesWithLocation = await Promise.all(files.map(async (file) => {
       const location = this.cdn.getSignedUrl(file.path);
       const thumbnails = file.thumbnails.map(path => this.cdn.getUrl(path));
+      const conversions = 'conversions' in file ? file.conversions.map(c => this.cdn.getUrl(c)) : undefined;
 
       return {
         ...file,
         location,
         thumbnails,
+        conversions,
       };
     }));
 
