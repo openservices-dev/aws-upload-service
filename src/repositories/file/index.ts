@@ -7,7 +7,7 @@ import services from '../../services';
 const container = {
   get DynamoDB(): FileRepository {
     if (typeof this._dynamoDB === 'undefined') {
-      this._dynamoDB = new DynamoDBRepository(services.Database, config.services.database.tableName);
+      this._dynamoDB = new DynamoDBRepository(services.Database, config.services.database.tableName, config.env === 'DEVELOPMENT');
     }
 
     return this._dynamoDB;

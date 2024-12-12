@@ -10,10 +10,14 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import logger from '../../logger';
 
+/**
+ * @see https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/
+ */
 class DynamoDBRepository implements FileRepository {
   constructor(
     protected dynamoDB: DynamoDBClient,
     protected tableName: string,
+    protected isDebugModeEnabled: boolean = false,
   ) {}
 
   public async get(id: ID, user: User = null): Promise<LocalFile | undefined> {
@@ -24,8 +28,9 @@ class DynamoDBRepository implements FileRepository {
       Key: {
         id: {
           S: id,
-        }
-      }
+        },
+      },
+      ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
   
     const result = await this.dynamoDB.send(command);
@@ -49,11 +54,13 @@ class DynamoDBRepository implements FileRepository {
     const command = new PutItemCommand({
       TableName: this.tableName,
       Item: marshall(item),
+      ConditionExpression: 'attribute_not_exists(id)',
+      ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
 
-    const result = await this.dynamoDB.send(command);
+    const response = await this.dynamoDB.send(command);
 
-    logger.debug('result', result);
+    logger.silly(`${this.constructor.name}.create.result`, response);
 
     return item as LocalFile;
   }
@@ -71,17 +78,18 @@ class DynamoDBRepository implements FileRepository {
           Keys: ids.map(id => ({
             id: {
               S: id,
-            }
-          }))
-        }
-      }
+            },
+          })),
+        },
+      },
+      ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
 
-    const result = await this.dynamoDB.send(command);
+    const response = await this.dynamoDB.send(command);
 
-    logger.debug('result', result);
+    logger.silly(`${this.constructor.name}.find.result`, response);
 
-    return result.Responses[this.tableName].map(item => unmarshall(item)) as LocalFile[];
+    return response.Responses[this.tableName].map(item => unmarshall(item)) as LocalFile[];
   }
 
   public async update(params: FileRepository.UpdateParameters, where: { id: ID }): Promise<LocalFile | undefined> {
@@ -107,21 +115,33 @@ class DynamoDBRepository implements FileRepository {
       Key: {
         id: {
           S: where.id,
-        }
+        },
       },
       UpdateExpression: `SET ${updateExpression.join(',')}`,
       ExpressionAttributeNames: attributeNames,
       ExpressionAttributeValues: attributeValues,
       ReturnValues: 'ALL_NEW',
+      ConditionExpression: 'attribute_exists(id)',
+      ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
 
     const response = await this.dynamoDB.send(command);
+
+    logger.silly(`${this.constructor.name}.update.response`, response);
 
     const item = unmarshall(response.Attributes);
 
     return item as LocalFile;
   }
 
+  /**
+   * 
+   * @param id 
+   * @param user 
+   * @returns 
+   * @see https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/dynamodb/command/DeleteItemCommand/
+   * @see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html
+   */
   public async delete(id: ID, user: User = null): Promise<LocalFile | undefined> {
     logger.debug(`${this.constructor.name}.delete`, { id, user });
 
@@ -130,7 +150,7 @@ class DynamoDBRepository implements FileRepository {
       Key: {
         id: {
           S: id as ID,
-        }
+        },
       },
       ReturnValues: 'ALL_OLD',
       ConditionExpression: user === null ? undefined : '#object.#key = :userId',
@@ -141,19 +161,20 @@ class DynamoDBRepository implements FileRepository {
       ExpressionAttributeValues: user === null ? undefined : {
         ':userId': {
           S: user.id,
-        }
-      }
+        },
+      },
+      ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
   
-    const result = await this.dynamoDB.send(command);
+    const response = await this.dynamoDB.send(command);
 
-    logger.debug('result', result);
+    logger.silly(`${this.constructor.name}.delete.response`, response);
 
-    if ('Item' in result === false) {
+    if ('Item' in response === false) {
       return undefined;
     }
 
-    const item = unmarshall(result.Item as any);
+    const item = unmarshall(response.Item as any);
 
     return item as LocalFile;
   }
