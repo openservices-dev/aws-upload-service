@@ -43,6 +43,10 @@ const app = Consumer.create({
   sqs: services.AWS.sqs,
 });
 
+app.on('message_processed', (message) => {
+  logger.debug('Message successfully processed and removed from the queue!', { message });
+});
+
 app.on('error', (err) => {
   logger.error('Unknown error occured!', { message: err.message, stack: err.stack });
 });
@@ -51,8 +55,11 @@ app.on('processing_error', (err) => {
   logger.error('Error while processing message from queue!', { message: err.message, stack: err.stack });
 });
 
-logger.info('Upload worker is running');
+app.on('timeout_error', (err) => {
+  logger.error('Timeout error!', { message: err.message, stack: err.stack });
+});
 
 namespace.run(() => {
+  logger.info('Upload worker is running');
   app.start();
 });

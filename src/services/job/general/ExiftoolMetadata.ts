@@ -1,4 +1,5 @@
 import Exiftool from '../../metadata/strategy/Exiftool';
+import logger from '../../../logger';
 
 /**
  * 
@@ -11,11 +12,13 @@ class ExiftoolMetadata implements Services.Job.Strategy {
   ) {}
 
   public async process(file: LocalFile): Promise<unknown> {
-    const buffer = await this.loadFile(file.path);
+    logger.debug(`${this.constructor.name}.process`, { file });
+
+    const readable = await this.storage.retrieve(file.path);
 
     const exiftool = new Exiftool();
   
-    const metadata = await exiftool.getMetadata(buffer);
+    const metadata = await exiftool.getMetadata(readable);
 
     const filteredMetadata = Object.keys(metadata)
       .filter(key => this.whitelist.includes(key))
@@ -27,19 +30,6 @@ class ExiftoolMetadata implements Services.Job.Strategy {
     return {
       metadata: filteredMetadata,
     };
-  }
-
-  private async loadFile(path: string): Promise<Buffer> {
-    const response: any = await this.storage.retrieve(path);
-
-    const buffer = await new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = []
-      response.on('data', chunk => chunks.push(chunk))
-      response.once('end', () => resolve(Buffer.concat(chunks)))
-      response.once('error', reject)
-    });
-
-    return buffer;
   }
 }
 

@@ -1,17 +1,18 @@
 import crypto from 'crypto';
+import stream from 'stream';
 import { exec } from 'child_process';
 import OS from 'os';
 import fs from 'fs';
 
 class ExiftoolStrategy implements Services.Metadata.Strategy {
   public async getMetadata(file: unknown): Promise<unknown> {
-    if (!Buffer.isBuffer(file)) {
-      throw new Error('ImageStrategy requires file to be instance of Buffer!');
-    }
-
     const filename = crypto.randomBytes(8).toString('hex');
 
-    await this.saveFile(file, filename);
+    if (file instanceof Buffer) {
+      await this.saveBuffer(file, filename);
+    } else if (stream.isReadable(file as any)) {
+      await this.saveReadable(file as any, filename);
+    }
 
     const data = await this.runExiftool(filename);
 
@@ -20,14 +21,30 @@ class ExiftoolStrategy implements Services.Metadata.Strategy {
     return data;
   }
 
-  protected async saveFile(file: unknown, filename: string): Promise<void> {
+  protected saveBuffer(buffer: Buffer, filename: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      fs.writeFile(`${OS.tmpdir()}/${filename}`, file as Buffer, function(err) {
+      fs.writeFile(`${OS.tmpdir()}/${filename}`, buffer, function(err) {
         if (err) {
-          reject();
+          reject(err);
         } else {
           resolve();
         }
+      });
+    });
+  }
+
+  protected async saveReadable(readable: NodeJS.ReadableStream, filename: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const writable = fs.createWriteStream(`${OS.tmpdir()}/${filename}`);
+
+      readable.pipe(writable);
+
+      writable.on('finish', () => {
+        resolve();
+      });
+
+      writable.on('error', (err) => {
+        reject(err);
       });
     });
   }
