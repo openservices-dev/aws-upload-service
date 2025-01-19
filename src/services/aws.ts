@@ -1,29 +1,30 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { SQSClient } from '@aws-sdk/client-sqs';
 import { MediaConvertClient } from '@aws-sdk/client-mediaconvert';
+import AWSXRay from '../logger/XRay';
 import config from '../config';
 
 export default () => {
   return {
     get s3(): S3Client {
-      return new S3Client({
+      return AWSXRay.captureAWSv3Client(new S3Client({
         region: config.services.storage.region,
         credentials: {
           accessKeyId: config.services.storage.accessKeyId,
           secretAccessKey: config.services.storage.secretAccessKey,
         },
-      });
+      }));
     },
 
     get sqs(): SQSClient {
-      return new SQSClient({
+      return AWSXRay.captureAWSv3Client(new SQSClient({
         apiVersion: '2012-11-05',
         region: config.services.queue.region,
         credentials: {
           accessKeyId: config.services.queue.accessKeyId,
           secretAccessKey: config.services.queue.secretAccessKey,
         }
-      });
+      }));
     },
 
     get mc(): MediaConvertClient {

@@ -265,6 +265,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/client-servicediscovery@npm:^3.731.1":
+  version: 3.731.1
+  resolution: "@aws-sdk/client-servicediscovery@npm:3.731.1"
+  dependencies:
+    "@aws-crypto/sha256-browser": "npm:5.2.0"
+    "@aws-crypto/sha256-js": "npm:5.2.0"
+    "@aws-sdk/core": "npm:3.731.0"
+    "@aws-sdk/credential-provider-node": "npm:3.731.1"
+    "@aws-sdk/middleware-host-header": "npm:3.731.0"
+    "@aws-sdk/middleware-logger": "npm:3.731.0"
+    "@aws-sdk/middleware-recursion-detection": "npm:3.731.0"
+    "@aws-sdk/middleware-user-agent": "npm:3.731.0"
+    "@aws-sdk/region-config-resolver": "npm:3.731.0"
+    "@aws-sdk/types": "npm:3.731.0"
+    "@aws-sdk/util-endpoints": "npm:3.731.0"
+    "@aws-sdk/util-user-agent-browser": "npm:3.731.0"
+    "@aws-sdk/util-user-agent-node": "npm:3.731.0"
+    "@smithy/config-resolver": "npm:^4.0.0"
+    "@smithy/core": "npm:^3.0.0"
+    "@smithy/fetch-http-handler": "npm:^5.0.0"
+    "@smithy/hash-node": "npm:^4.0.0"
+    "@smithy/invalid-dependency": "npm:^4.0.0"
+    "@smithy/middleware-content-length": "npm:^4.0.0"
+    "@smithy/middleware-endpoint": "npm:^4.0.0"
+    "@smithy/middleware-retry": "npm:^4.0.0"
+    "@smithy/middleware-serde": "npm:^4.0.0"
+    "@smithy/middleware-stack": "npm:^4.0.0"
+    "@smithy/node-config-provider": "npm:^4.0.0"
+    "@smithy/node-http-handler": "npm:^4.0.0"
+    "@smithy/protocol-http": "npm:^5.0.0"
+    "@smithy/smithy-client": "npm:^4.0.0"
+    "@smithy/types": "npm:^4.0.0"
+    "@smithy/url-parser": "npm:^4.0.0"
+    "@smithy/util-base64": "npm:^4.0.0"
+    "@smithy/util-body-length-browser": "npm:^4.0.0"
+    "@smithy/util-body-length-node": "npm:^4.0.0"
+    "@smithy/util-defaults-mode-browser": "npm:^4.0.0"
+    "@smithy/util-defaults-mode-node": "npm:^4.0.0"
+    "@smithy/util-endpoints": "npm:^3.0.0"
+    "@smithy/util-middleware": "npm:^4.0.0"
+    "@smithy/util-retry": "npm:^4.0.0"
+    "@smithy/util-utf8": "npm:^4.0.0"
+    "@types/uuid": "npm:^9.0.1"
+    tslib: "npm:^2.6.2"
+    uuid: "npm:^9.0.1"
+  checksum: 10c0/70504602fc4f74c0721b7cdb366b06152dd44a415488dd8001f2493e2387bc19c9de4ddc7fde6b02a1b0da07a2205680a6dcf00a6837a46e8b24ba4cb12584ba
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/client-sqs@npm:^3.637.0":
   version: 3.645.0
   resolution: "@aws-sdk/client-sqs@npm:3.645.0"
@@ -1210,7 +1259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.731.0":
+"@aws-sdk/types@npm:3.731.0, @aws-sdk/types@npm:^3.4.1":
   version: 3.731.0
   resolution: "@aws-sdk/types@npm:3.731.0"
   dependencies:
@@ -3477,6 +3526,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/service-error-classification@npm:^2.0.4":
+  version: 2.1.5
+  resolution: "@smithy/service-error-classification@npm:2.1.5"
+  dependencies:
+    "@smithy/types": "npm:^2.12.0"
+  checksum: 10c0/e3fb24af5a3a60bf6479bc057bc832f89a0b427650ea2f262220a9627d60d2ab455ad766a2fcceb55fba1b15eddb82b25775fb781c254d2031768f5f8e131e15
+  languageName: node
+  linkType: hard
+
 "@smithy/service-error-classification@npm:^3.0.3":
   version: 3.0.3
   resolution: "@smithy/service-error-classification@npm:3.0.3"
@@ -3573,6 +3631,15 @@ __metadata:
     "@smithy/util-stream": "npm:^4.0.2"
     tslib: "npm:^2.6.2"
   checksum: 10c0/9119b5f69578da81c4af4b3955f019f9e9bbcca92e93ae1f5ffc29cc9a35d76e2810414de47103f48936ff11892f0c7044632eb17e600355232dcd0bd0124d8e
+  languageName: node
+  linkType: hard
+
+"@smithy/types@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "@smithy/types@npm:2.12.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/3530ba5b4f4e52a4028679f73e133af928cf6ea22a16d29669b8c67ea540ed46ab15dc6d391598fbdfd476884cdc57881c480168e2dbe7c5bb007f5afad01531
   languageName: node
   linkType: hard
 
@@ -4002,6 +4069,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cls-hooked@npm:^4.3.3":
+  version: 4.3.9
+  resolution: "@types/cls-hooked@npm:4.3.9"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/fd531903b2cd7fa76d36ec81142ac55f0ea8702f6d76238a1ca5c773b8e35889cf528198a8a83b5e551f928f47bdfad947e29d9ebbe0df712cbf14510f7ae713
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.38
   resolution: "@types/connect@npm:3.4.38"
@@ -4124,6 +4200,15 @@ __metadata:
   dependencies:
     "@types/express": "npm:*"
   checksum: 10c0/1250a32a66b7c5929cc5b005dae4ad0768ded9b6b52ba6f90931ff39b4ed775b09a0fd9d880f0836bcac16a9a7febed6a479c6bf108a52a244c4c53badb82a7b
+  languageName: node
+  linkType: hard
+
+"@types/mysql@npm:*":
+  version: 2.15.26
+  resolution: "@types/mysql@npm:2.15.26"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/3cf279e7db05d56c0544532a4380b9079f579092379a04c8138bd5cf88dda5b31208ac2d23ce7dbf4e3a3f43aaeed44e72f9f19f726518f308efe95a7435619a
   languageName: node
   linkType: hard
 
@@ -4252,6 +4337,13 @@ __metadata:
   version: 10.0.0
   resolution: "@types/uuid@npm:10.0.0"
   checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
+  languageName: node
+  linkType: hard
+
+"@types/uuid@npm:^9.0.1":
+  version: 9.0.8
+  resolution: "@types/uuid@npm:9.0.8"
+  checksum: 10c0/b411b93054cb1d4361919579ef3508a1f12bf15b5fdd97337d3d351bece6c921b52b6daeef89b62340fd73fd60da407878432a1af777f40648cbe53a01723489
   languageName: node
   linkType: hard
 
@@ -4596,6 +4688,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"atomic-batcher@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "atomic-batcher@npm:1.0.2"
+  checksum: 10c0/6511385b61eca9ba1feedd85b78ba601818aba6fffc65ba3ba1b361d32f4a36b2e735c4d65a316568163beeb76bae7a21d3b043c1a1e5e2b5fa116048f5f7d2b
+  languageName: node
+  linkType: hard
+
 "aws-upload-service@workspace:.":
   version: 0.0.0-use.local
   resolution: "aws-upload-service@workspace:."
@@ -4603,6 +4702,7 @@ __metadata:
     "@aws-sdk/client-dynamodb": "npm:^3.645.0"
     "@aws-sdk/client-mediaconvert": "npm:^3.637.0"
     "@aws-sdk/client-s3": "npm:^3.637.0"
+    "@aws-sdk/client-servicediscovery": "npm:^3.731.1"
     "@aws-sdk/client-sqs": "npm:^3.637.0"
     "@aws-sdk/cloudfront-signer": "npm:^3.621.0"
     "@aws-sdk/lib-storage": "npm:^3.637.0"
@@ -4618,6 +4718,7 @@ __metadata:
     "@types/uuid": "npm:^10.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
+    aws-xray-sdk: "npm:^3.10.2"
     cls-hooked: "npm:^4.2.2"
     deepmerge: "npm:^4.3.1"
     eslint: "npm:^8.57.0"
@@ -4639,6 +4740,65 @@ __metadata:
     winston: "npm:^3.14.2"
   languageName: unknown
   linkType: soft
+
+"aws-xray-sdk-core@npm:3.10.2":
+  version: 3.10.2
+  resolution: "aws-xray-sdk-core@npm:3.10.2"
+  dependencies:
+    "@aws-sdk/types": "npm:^3.4.1"
+    "@smithy/service-error-classification": "npm:^2.0.4"
+    "@types/cls-hooked": "npm:^4.3.3"
+    atomic-batcher: "npm:^1.0.2"
+    cls-hooked: "npm:^4.2.2"
+    semver: "npm:^7.5.3"
+  checksum: 10c0/0d47b13687f841092e927c919085d0570aca67ad9a12251f1d8395c9628f6fcc738d962897032b993c3cf1a94e11cdbe64d23cfbd6106adde732bb46495d5c9e
+  languageName: node
+  linkType: hard
+
+"aws-xray-sdk-express@npm:3.10.2":
+  version: 3.10.2
+  resolution: "aws-xray-sdk-express@npm:3.10.2"
+  dependencies:
+    "@types/express": "npm:*"
+  peerDependencies:
+    aws-xray-sdk-core: ^3.10.2
+  checksum: 10c0/8bc5846394eadf9ea2f89e5d28e2219cde88d9390a8b83b23ad4983efcd85d037f17deb9d627b1784205aae25d54a759532c17f027ef0cd492f4e927ccfc5379
+  languageName: node
+  linkType: hard
+
+"aws-xray-sdk-mysql@npm:3.10.2":
+  version: 3.10.2
+  resolution: "aws-xray-sdk-mysql@npm:3.10.2"
+  dependencies:
+    "@types/mysql": "npm:*"
+  peerDependencies:
+    aws-xray-sdk-core: ^3.10.2
+  checksum: 10c0/b612825a3140a8b9c28262758dfe5184e15c6d0652fe46254d64728ed1183883059e16e506baac19d109e170e65b683acc1a4a5bbc5fd69ea3329691c086cc14
+  languageName: node
+  linkType: hard
+
+"aws-xray-sdk-postgres@npm:3.10.2":
+  version: 3.10.2
+  resolution: "aws-xray-sdk-postgres@npm:3.10.2"
+  dependencies:
+    "@types/pg": "npm:*"
+  peerDependencies:
+    aws-xray-sdk-core: ^3.10.2
+  checksum: 10c0/190dde93c458f712fd42946c172ac0dca1290ff3a5ce781273d22bb0a5992d5689b08bd96f0c541ca2870bf79a7e900b883399cc2ab1d08daac114b3ae3c6618
+  languageName: node
+  linkType: hard
+
+"aws-xray-sdk@npm:^3.10.2":
+  version: 3.10.2
+  resolution: "aws-xray-sdk@npm:3.10.2"
+  dependencies:
+    aws-xray-sdk-core: "npm:3.10.2"
+    aws-xray-sdk-express: "npm:3.10.2"
+    aws-xray-sdk-mysql: "npm:3.10.2"
+    aws-xray-sdk-postgres: "npm:3.10.2"
+  checksum: 10c0/7bd956d893ac23d48b7a569117c7c9aa62ed55d538ec288cbf22ea588829e0f5cffefe59a9e865b20ac2c8ad54711fc940291c0baa58138c541bec461992276b
+  languageName: node
+  linkType: hard
 
 "babel-jest@npm:^29.7.0":
   version: 29.7.0

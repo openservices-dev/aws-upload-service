@@ -7,6 +7,7 @@ import cors from './middlewares/cors';
 import trace from './middlewares/trace';
 import logRequest from './middlewares/logRequest';
 import errorHandler from './middlewares/errorHandler';
+import AWSXRay from './logger/XRay';
 import './logger/sentry';
 
 const app = express();
@@ -22,7 +23,9 @@ app.use(trace);
 app.use(cors);
 app.use(logRequest);
 
+app.use(AWSXRay.express.openSegment('uplad-service'));
 app.use(`${config.routePrefix}`, routes);
+app.use(AWSXRay.express.closeSegment());
 
 app.use(errorHandler);
 
