@@ -238,7 +238,7 @@ export default {
        * @type {string="AWS_XRAY", "CLS_HOOKED"}
        * @default CLS_HOOKED
        */
-      type: process.env.SERVICES_TRACE_TYPE || 'AWS_XRAY',
+      type: process.env.SERVICES_TRACE_TYPE || 'CLS_HOOKED',
       /**
        * If using Service Discovery to find the daemon address.
        * @type {string}
