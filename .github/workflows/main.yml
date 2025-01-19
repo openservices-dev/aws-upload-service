@@ -24,7 +24,7 @@ jobs:
       run: corepack enable
     - uses: actions/setup-node@v4
       env:
-        yarn: 4.5.3
+        yarn: 4.6.0
       with:
         node-version: 22
         cache: 'yarn'
