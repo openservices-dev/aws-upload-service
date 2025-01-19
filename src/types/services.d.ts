@@ -50,4 +50,20 @@ declare namespace Services {
       complete(payload: any): Promise<void>;
     }
   }
+
+  interface Trace {
+    openSegment(defaultName: string): unknown;
+
+    closeSegment(): unknown;
+
+    createSegment(name: string): unknown;
+
+    setSegment(segment: unknown): void;
+
+    getTraceId(): string;
+
+    getNamespace(): unknown;
+
+    captureAWSv3Client<T>(client: T): T;
+  }
 }

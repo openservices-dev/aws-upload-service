@@ -1,13 +1,13 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { SQSClient } from '@aws-sdk/client-sqs';
 import { MediaConvertClient } from '@aws-sdk/client-mediaconvert';
-import AWSXRay from '../logger/XRay';
+import services from './';
 import config from '../config';
 
 export default () => {
   return {
     get s3(): S3Client {
-      return AWSXRay.captureAWSv3Client(new S3Client({
+      return services.Trace.captureAWSv3Client(new S3Client({
         region: config.services.storage.region,
         credentials: {
           accessKeyId: config.services.storage.accessKeyId,
@@ -17,7 +17,7 @@ export default () => {
     },
 
     get sqs(): SQSClient {
-      return AWSXRay.captureAWSv3Client(new SQSClient({
+      return services.Trace.captureAWSv3Client(new SQSClient({
         apiVersion: '2012-11-05',
         region: config.services.queue.region,
         credentials: {
@@ -28,7 +28,7 @@ export default () => {
     },
 
     get mc(): MediaConvertClient {
-      return new MediaConvertClient({
+      return services.Trace.captureAWSv3Client(new MediaConvertClient({
         apiVersion: '2017-08-29',
         region: config.services.job.video.region,
         endpoint: config.services.job.video.endpoint,
@@ -36,7 +36,7 @@ export default () => {
           accessKeyId: config.services.job.video.accessKeyId,
           secretAccessKey: config.services.job.video.secretAccessKey,
         }
-      });
+      }));
     },
   }
 }

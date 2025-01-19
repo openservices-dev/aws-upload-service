@@ -4,10 +4,9 @@ import * as Sentry from '@sentry/node';
 import config from './config';
 import routes from './routes';
 import cors from './middlewares/cors';
-import trace from './middlewares/trace';
 import logRequest from './middlewares/logRequest';
 import errorHandler from './middlewares/errorHandler';
-import AWSXRay from './logger/XRay';
+import services from './services';
 import './logger/sentry';
 
 const app = express();
@@ -19,13 +18,12 @@ app.set('query parser', function (str: string) {
 typeof process.env.SENTRY_DSN === 'string' && Sentry.setupExpressErrorHandler(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(trace);
 app.use(cors);
 app.use(logRequest);
 
-app.use(AWSXRay.express.openSegment('uplad-service'));
+app.use(services.Trace.openSegment('uplad-service') as any);
 app.use(`${config.routePrefix}`, routes);
-app.use(AWSXRay.express.closeSegment());
+app.use(services.Trace.closeSegment() as any);
 
 app.use(errorHandler);
 

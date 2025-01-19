@@ -4,8 +4,6 @@ import config from './config';
 import logger from './logger';
 import video from './services/job/video';
 import repositories from './repositories';
-import namespace from './services/cls';
-import AWSXRay from './logger/XRay';
 
 const app = Consumer.create({
   queueUrl: config.services.queue.url,
@@ -60,16 +58,15 @@ app.on('timeout_error', (err) => {
   logger.error('Timeout error!', { message: err.message, stack: err.stack });
 });
 
+const namespace: any = services.Trace.getNamespace();
+const segment: any = services.Trace.createSegment('upload-service-worker');
+
 namespace.run(() => {
-  const segment = new AWSXRay.Segment('upload-service-worker');
-  const ns = AWSXRay.getNamespace();
+  services.Trace.setSegment(segment);
 
-  ns.run(() => {
-    AWSXRay.setSegment(segment);
+  logger.info('Upload worker is running');
 
-    logger.info('Upload worker is running');
-    app.start();
-    
-    segment.close();
-  });
+  app.start();
+
+  segment.close();
 });

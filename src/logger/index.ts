@@ -1,5 +1,5 @@
 import winston, { format } from 'winston';
-import namespace from '../services/cls';
+import services from '../services'
 import config from '../config';
 
 /**
@@ -14,11 +14,13 @@ import config from '../config';
  * @see https://www.npmjs.com/package/cls-hooked
  */
 const hookedFormat = format((info) => {
-  const traceId = namespace.get('traceId');
+  const traceId = services.Trace.getTraceId();
 
-  if (typeof traceId !== 'undefined') {
-    info.traceId = traceId;
+  if (typeof traceId === 'undefined') {
+    return info;
   }
+
+  info.traceId = traceId;
 
   return info;
 });

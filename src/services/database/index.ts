@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import AWSXRay from '../../logger/XRay';
+// import AWSXRay from '../../logger/XRay';
 import config from '../../config';
+import services from '../'
 
 const container = {
   get DynamoDB(): DynamoDBClient {
@@ -14,7 +15,7 @@ const container = {
         region: config.services.database.region,
       });
 
-      this._dynamoDB = AWSXRay.captureAWSv3Client(dynamoDB);
+      this._dynamoDB = services.Trace.captureAWSv3Client(dynamoDB);
     }
 
     return this._dynamoDB;

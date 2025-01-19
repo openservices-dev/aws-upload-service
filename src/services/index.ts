@@ -7,6 +7,7 @@ import cdn from './cdn';
 import metadata from './metadata';
 import job from './job';
 import cache from './cache';
+import trace from './trace';
 import config from '../config';
 
 const container = {
@@ -52,6 +53,16 @@ const container = {
   get Job(): Services.Job {
     return job.Job;
   },
+
+  get Trace(): Services.Trace {
+    switch (config.services.trace.type) {
+      case 'AWS_XRAY':
+        return trace.AWSXRay;
+      case 'CLS_HOOKED':
+      default:
+        return trace.CLSHooked;
+    }
+  }
 };
 
 export default container;
