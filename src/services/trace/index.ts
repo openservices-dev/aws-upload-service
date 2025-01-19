@@ -14,8 +14,8 @@ const container = {
           const client = new ServiceDiscoveryClient({ region: process.env.AWS_XRAY_REGION });
 
           const input = {
-            NamespaceName: process.env.AWS_XRAY_SERVICE_NAMESPACE,
-            ServiceName: process.env.AWS_XRAY_SERVICE_NAME,
+            NamespaceName: config.services.trace.daemonAddressNamespace,
+            ServiceName: config.services.trace.daemonAddressName,
             MaxResults: 1,
             HealthStatus: HealthStatusFilter.HEALTHY_OR_ELSE_ALL,
           };
