@@ -11,8 +11,6 @@ class AWSXRay implements Services.Trace {
   }
 
   public openSegment(defaultName: string) {
-    XRay.middleware.disableCentralizedSampling();
-
     return XRay.express.openSegment(defaultName);
   }
 
