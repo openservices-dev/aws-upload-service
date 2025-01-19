@@ -5,6 +5,7 @@ import logger from './logger';
 import video from './services/job/video';
 import repositories from './repositories';
 import namespace from './services/cls';
+import AWSXRay from './logger/XRay';
 
 const app = Consumer.create({
   queueUrl: config.services.queue.url,
@@ -60,6 +61,15 @@ app.on('timeout_error', (err) => {
 });
 
 namespace.run(() => {
-  logger.info('Upload worker is running');
-  app.start();
+  const segment = new AWSXRay.Segment('upload-service-worker');
+  const ns = AWSXRay.getNamespace();
+
+  ns.run(() => {
+    AWSXRay.setSegment(segment);
+
+    logger.info('Upload worker is running');
+    app.start();
+    
+    segment.close();
+  });
 });
