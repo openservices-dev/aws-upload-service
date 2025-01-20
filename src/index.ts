@@ -1,11 +1,8 @@
 import http from 'http';
 import { createTerminus } from '@godaddy/terminus';
-import app from './app';
 import config from './config';
 import logger from './logger';
 import services from './services';
-
-const server = http.createServer(app);
 
 async function onSignal(): Promise<void> {
   logger.warn('Server is going to shut down! Starting cleanup...');
@@ -19,14 +16,6 @@ async function onHealthCheck(): Promise<void> {
   return;
 }
 
-createTerminus(server, {
-  healthChecks: {
-    '/health/liveness': onHealthCheck,
-  },
-  onSignal,
-  onShutdown,
-});
-
 async function start(): Promise<void> {
   try {
     const namespace = config.services.trace.daemonAddressNamespace;
@@ -35,8 +24,19 @@ async function start(): Promise<void> {
       const address = await services.ServiceDiscovery.discoverInstance(namespace, name);
   
       (services.Trace as any).setDaemonAddress(address);
-      (services.Trace as any).captureHTTPRequests();
     }
+
+    const app = (await import('./app')).default;
+    
+    const server = http.createServer(app);
+
+    createTerminus(server, {
+      healthChecks: {
+        '/health/liveness': onHealthCheck,
+      },
+      onSignal,
+      onShutdown,
+    });
 
     server.listen(config.port, () => {
       logger.info(`Server started at http://localhost:${ config.port }`);
