@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors);
 app.use(logRequest);
 
-app.use(services.Trace.openSegment('uplad-service') as any);
+app.use(services.Trace.openSegment(config.serviceName) as any);
 app.use(`${config.routePrefix}`, routes);
 app.use(services.Trace.closeSegment() as any);
 

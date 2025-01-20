@@ -11,7 +11,7 @@ const consumer = Consumer.create({
   handleMessage: async (message) => {
     const traceHeader = message.Attributes.AWSTraceHeader;
     const traceData = services.Trace.processTraceData(traceHeader);
-    const segment: any = services.Trace.createSegment('upload-service-worker', traceData.root, traceData.parent);
+    const segment: any = services.Trace.createSegment(config.serviceName, traceData.root, traceData.parent);
     services.Trace.setSegment(segment);
 
     logger.debug('Received message from queue!', { ...message });
