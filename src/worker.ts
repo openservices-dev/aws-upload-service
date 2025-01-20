@@ -10,7 +10,6 @@ async function start() {
     const address = await services.ServiceDiscovery.discoverInstance(namespace, name);
 
     (services.Trace as any).setDaemonAddress(address);
-    (services.Trace as any).captureHTTPRequests();
   }
   
   logger.info('Upload worker is running');

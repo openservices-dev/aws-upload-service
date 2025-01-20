@@ -4,8 +4,6 @@ import config from '../../config';
 
 const container = {
   get AWSXRay() {
-    console.log('Trace.AWSXRay()');
-
     if (typeof this._awsXRay === 'undefined') {
       this._awsXRay = new AWSXRay(config.services.trace.plugins);
     }
@@ -14,7 +12,6 @@ const container = {
   },
 
   get CLSHooked() {
-    console.log('Trace.CLSHooked()');
     if (typeof this._clsHooked === 'undefined') {
       this._clsHooked = new CLSHooked();
     }
