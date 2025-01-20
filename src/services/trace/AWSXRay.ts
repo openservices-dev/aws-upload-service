@@ -6,8 +6,7 @@ class AWSXRay implements Services.Trace {
   constructor (plugins: string) {
     this.setPlugins(plugins);
 
-    XRay.captureHTTPsGlobal(http, true);
-    XRay.captureHTTPsGlobal(https, true);
+    XRay.middleware.disableCentralizedSampling();
   }
 
   public openSegment(defaultName: string) {
@@ -18,8 +17,8 @@ class AWSXRay implements Services.Trace {
     return XRay.express.closeSegment();
   }
 
-  public createSegment(name: string) {
-    return new XRay.Segment(name);
+  public createSegment(name: string, rootId?: string | null, parentId?: string | null) {
+    return new XRay.Segment(name, rootId, parentId);
   }
 
   public setSegment(segment: unknown): void {
@@ -29,7 +28,7 @@ class AWSXRay implements Services.Trace {
   public getTraceId(): string {
     const namespace = XRay.getNamespace();
 
-    if (namespace.active === null) {
+    if (namespace.active === null || 'segment' in namespace.active === false) {
       return undefined;
     }
 
@@ -44,6 +43,11 @@ class AWSXRay implements Services.Trace {
 
   public captureAWSv3Client<T>(client: T): T {
     return XRay.captureAWSv3Client(client as T & { middlewareStack: { remove: any, use: any }, config: any });
+  }
+
+  public captureHTTPRequests(): void {
+    XRay.captureHTTPsGlobal(http, true);
+    XRay.captureHTTPsGlobal(https, true);
   }
 
   public setDaemonAddress(address: string) {
@@ -62,6 +66,10 @@ class AWSXRay implements Services.Trace {
     ].filter(plugin => plugin !== null);
 
     XRay.config(xrayPlugins); 
+  }
+
+  public processTraceData(data: string): { [key: string]: string } {
+    return XRay.utils.processTraceData(data);
   }
 }
 

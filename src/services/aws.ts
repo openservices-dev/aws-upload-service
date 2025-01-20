@@ -27,6 +27,17 @@ export default () => {
       }));
     },
 
+    get sqsConsumer(): SQSClient {
+      return new SQSClient({
+        apiVersion: '2012-11-05',
+        region: config.services.queue.region,
+        credentials: {
+          accessKeyId: config.services.queue.accessKeyId,
+          secretAccessKey: config.services.queue.secretAccessKey,
+        }
+      });
+    },
+
     get mc(): MediaConvertClient {
       return services.Trace.captureAWSv3Client(new MediaConvertClient({
         apiVersion: '2017-08-29',

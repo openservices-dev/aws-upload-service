@@ -44,8 +44,16 @@ class CLSHooked implements Services.Trace {
     return client;
   }
 
+  public captureHTTPRequests(): void {
+    return;
+  }
+
   public getNamespace() {
     return cls.getNamespace(NAMESPACE) || cls.createNamespace(NAMESPACE);
+  }
+
+  public processTraceData(): { [key: string]: string } {
+    return {};
   }
 }
 

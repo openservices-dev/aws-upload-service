@@ -1,7 +1,6 @@
 import services from './services';
 import config from './config';
 import logger from './logger';
-import Consumer from './services/worker/Consumer';
 
 async function start() {
   const namespace = config.services.trace.daemonAddressNamespace;
@@ -14,8 +13,12 @@ async function start() {
   
   logger.info('Upload worker is running');
 
-  const consumer = Consumer.get();
-  consumer.start();
+  const consumer = (await import('./worker/Consumer')).default;
+  const ns = services.Trace.getNamespace();
+
+  (ns as any).run(() => {
+    consumer.start();
+  });
 }
 
 start();

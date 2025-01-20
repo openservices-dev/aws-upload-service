@@ -56,7 +56,7 @@ declare namespace Services {
 
     closeSegment(): unknown;
 
-    createSegment(name: string): unknown;
+    createSegment(name: string, rootId?: string | null, parentId?: string | null): unknown;
 
     setSegment(segment: unknown): void;
 
@@ -65,5 +65,9 @@ declare namespace Services {
     getNamespace(): unknown;
 
     captureAWSv3Client<T>(client: T): T;
+
+    captureHTTPRequests(): void;
+
+    processTraceData(data: string): { [key: string]: string };
   }
 }
