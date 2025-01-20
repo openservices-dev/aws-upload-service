@@ -5,8 +5,6 @@ import https from 'https';
 class AWSXRay implements Services.Trace {
   constructor (plugins: string) {
     this.setPlugins(plugins);
-
-    XRay.middleware.disableCentralizedSampling();
   }
 
   public openSegment(defaultName: string) {

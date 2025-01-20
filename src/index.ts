@@ -26,6 +26,8 @@ async function start(): Promise<void> {
       (services.Trace as any).setDaemonAddress(address);
     }
 
+    services.Trace.captureHTTPRequests();
+
     const app = (await import('./app')).default;
     
     const server = http.createServer(app);
