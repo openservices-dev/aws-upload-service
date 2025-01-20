@@ -260,6 +260,6 @@ export default {
        * @requires SERVICES_TRACE_TYPE=AWS_XRAY
        */
       plugins: process.env.SERVICES_TRACE_PLUGINS,
-    }
+    },
   },
 }

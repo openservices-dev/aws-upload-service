@@ -1,5 +1,5 @@
 import winston, { format } from 'winston';
-import services from '../services'
+import services from '../services';
 import config from '../config';
 
 /**
