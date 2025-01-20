@@ -29,6 +29,7 @@ createTerminus(server, {
 
 async function start(): Promise<void> {
   try {
+    console.log('Main.start();');
     const namespace = config.services.trace.daemonAddressNamespace;
     const name = config.services.trace.daemonAddressName;
     if (typeof namespace === 'string' && typeof name === 'string') {
@@ -47,4 +48,5 @@ async function start(): Promise<void> {
   }
 }
 
+console.log('What the kurwa?!');
 start();
