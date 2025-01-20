@@ -8,6 +8,7 @@ import metadata from './metadata';
 import job from './job';
 import cache from './cache';
 import trace from './trace';
+import ServiceDiscovery from './serviceDiscovery';
 import config from '../config';
 
 const container = {
@@ -62,6 +63,10 @@ const container = {
       default:
         return trace.CLSHooked;
     }
+  },
+
+  get ServiceDiscovery() {
+    return new ServiceDiscovery();
   }
 };
 

@@ -3,6 +3,7 @@ import { createTerminus } from '@godaddy/terminus';
 import app from './app';
 import config from './config';
 import logger from './logger';
+import services from './services';
 
 const server = http.createServer(app);
 
@@ -28,6 +29,14 @@ createTerminus(server, {
 
 async function start(): Promise<void> {
   try {
+    const namespace = config.services.trace.daemonAddressNamespace;
+    const name = config.services.trace.daemonAddressName;
+    if (typeof namespace === 'string' && typeof name === 'string') {
+      const address = await services.ServiceDiscovery.discoverInstance(namespace, name);
+  
+      (services.Trace as any).setDaemonAddress(address);
+    }
+
     server.listen(config.port, () => {
       logger.info(`Server started at http://localhost:${ config.port }`);
     });

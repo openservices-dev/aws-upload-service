@@ -69,6 +69,18 @@ app.on('timeout_error', (err) => {
   logger.error('Timeout error!', { message: err.message, stack: err.stack });
 });
 
-logger.info('Upload worker is running');
+async function start() {
+  const namespace = config.services.trace.daemonAddressNamespace;
+  const name = config.services.trace.daemonAddressName;
+  if (typeof namespace === 'string' && typeof name === 'string') {
+    const address = await services.ServiceDiscovery.discoverInstance(namespace, name);
 
-app.start();
+    (services.Trace as any).setDaemonAddress(address);
+  }
+  
+  logger.info('Upload worker is running');
+
+  app.start();
+}
+
+start();
