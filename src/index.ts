@@ -35,6 +35,7 @@ async function start(): Promise<void> {
       const address = await services.ServiceDiscovery.discoverInstance(namespace, name);
   
       (services.Trace as any).setDaemonAddress(address);
+      (services.Trace as any).captureHTTPRequests();
     }
 
     server.listen(config.port, () => {
