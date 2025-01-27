@@ -16,7 +16,7 @@ export default {
    * @type {string}
    * @default upload-service
    */
-  serviceName: process.env.SERVICE_NAME || 'upload-service',
+  serviceName: process.env.SERVICE_NAME || 'aws-upload-service',
   /**
    * Prefix for all routes.
    * @type {string}
@@ -238,7 +238,7 @@ export default {
        * @type {string="AWS_XRAY", "CLS_HOOKED"}
        * @default CLS_HOOKED
        */
-      type: process.env.SERVICES_TRACE_TYPE || 'CLS_HOOKED',
+      type: process.env.SERVICES_TRACE_TYPE || 'AWS_XRAY',
       /**
        * If using Service Discovery to find the daemon address.
        * @type {string}
