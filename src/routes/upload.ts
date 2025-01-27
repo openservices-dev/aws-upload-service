@@ -62,7 +62,9 @@ router.post('/', optionalAuth, uploadMiddleware, validateRequest(postSchema), as
       data: {
         file,
       }
-    }).end();
+    });
+    
+     next();
   } catch (err) {
     next(err);
   }

@@ -67,7 +67,7 @@ const container = {
 
   get ServiceDiscovery() {
     return new ServiceDiscovery();
-  }
+  },
 };
 
 export default container;

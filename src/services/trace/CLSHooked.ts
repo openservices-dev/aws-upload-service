@@ -9,11 +9,11 @@ class CLSHooked implements Services.Trace {
     const namespace = this.getNamespace();
 
     return (req: Request, res: Response, next: NextFunction) => {
-      const traceId = req.query.traceId ? req.query.traceId as string : uuidv7();
+      const traceId = req.headers['x-request-id'] as string || req.query.traceId as string || uuidv7();
 
       namespace.run(() => {
         namespace.set('traceId', traceId);
-        res.header('x-request-id', traceId);
+        res.setHeader('x-request-id', traceId);
     
         next();
       });

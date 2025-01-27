@@ -1,6 +1,7 @@
 import XRay from 'aws-xray-sdk';
 import http from 'http';
 import https from 'https';
+import type { Request, Response, NextFunction } from 'express';
 
 class AWSXRay implements Services.Trace {
   constructor (plugins: string) {
@@ -8,7 +9,15 @@ class AWSXRay implements Services.Trace {
   }
 
   public openSegment(defaultName: string) {
-    return XRay.express.openSegment(defaultName);
+    const traceMiddleware = (req: Request, res: Response, next: NextFunction) => {
+      const traceId = this.getTraceId();
+
+      res.setHeader('x-request-id', traceId);
+
+      next();
+    };
+
+    return [ XRay.express.openSegment(defaultName), traceMiddleware ];
   }
 
   public closeSegment() {
