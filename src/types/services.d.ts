@@ -52,9 +52,9 @@ declare namespace Services {
   }
 
   interface Trace {
-    openSegment(defaultName: string): unknown;
+    openSegment(defaultName: string): import ('express').RequestHandler | import ('express').RequestHandler[];
 
-    closeSegment(): unknown;
+    closeSegment(): import ('express').ErrorRequestHandler;
 
     createSegment(name: string, rootId?: string | null, parentId?: string | null): unknown;
 

@@ -26,7 +26,7 @@ const router = express.Router();
  */
 const multerPromise = (req: express.Request, res: express.Response) => {
   return new Promise<void>((resolve, reject) => {
-    upload(req, res, (err) => {
+    upload(req as any, res as any, (err) => {
       if(!err) {
         resolve();
       }
@@ -64,7 +64,7 @@ router.post('/', optionalAuth, uploadMiddleware, validateRequest(postSchema), as
       }
     });
     
-     next();
+    next();
   } catch (err) {
     next(err);
   }

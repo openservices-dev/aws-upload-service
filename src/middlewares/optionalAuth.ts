@@ -1,12 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import services from '../services';
 
-export default async function auth(req: Request, res: Response, next: NextFunction): Promise<unknown> {
-  if (req.method === 'OPTIONS') {
-    return next();
-  }
-
-  if ('authorization' in req.headers) {
+export default async function auth(req: Request, res: Response, next: NextFunction): Promise<void> {
+  if (req.method !== 'OPTIONS' && 'authorization' in req.headers) {
     const token = req.headers.authorization.replace('Bearer ', '');
 
     try {
@@ -16,7 +12,7 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
   
       req['user'] = services.Token.getUserData(data);
     } catch (err) {
-      return res.status(401).json({ error: 'Unauthorized!' });
+      res.status(401).json({ error: 'Unauthorized!' });
     }
   }
 
