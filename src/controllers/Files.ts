@@ -29,7 +29,7 @@ class Files implements FilesController {
   public async list(params: { ids: ID[] }, user: User = null): Promise<FilesController.GetFileResponse[]> {
     const files = await this.fileRepository.find({ ...params, user });
 
-    const filesWithLocation = await Promise.all(files.map(async (file) => {
+    const filesWithLocation = files.map((file) => {
       const location = this.cdn.getSignedUrl(file.path);
       const thumbnails = file.thumbnails.map(path => this.cdn.getUrl(path));
       const conversions = 'conversions' in file ? file.conversions.map(c => this.cdn.getUrl(c)) : undefined;
@@ -40,7 +40,7 @@ class Files implements FilesController {
         thumbnails,
         conversions,
       };
-    }));
+    });
 
     return filesWithLocation;
   }
