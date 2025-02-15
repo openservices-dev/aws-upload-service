@@ -33,9 +33,12 @@ class DynamoDBRepository implements FileRepository {
       ReturnConsumedCapacity: this.isDebugModeEnabled ? 'TOTAL' : 'NONE',
     });
   
-    const result = await this.dynamoDB.send(command);
+    const response = await this.dynamoDB.send(command);
 
-    const item = unmarshall(result.Item);
+    logger.silly(`${this.constructor.name}.get.response`, response);
+    logger.debug(`${this.constructor.name}.get.consumedCapacity`, response.ConsumedCapacity);
+
+    const item = unmarshall(response.Item);
 
     return item as LocalFile;
   }
@@ -47,6 +50,7 @@ class DynamoDBRepository implements FileRepository {
       id: uuidv4(),
       thumbnails: [],
       cacheable: false,
+      typename: 'File',
       ...params,
       createdAt: new Date().toISOString(),
     }
@@ -60,7 +64,8 @@ class DynamoDBRepository implements FileRepository {
 
     const response = await this.dynamoDB.send(command);
 
-    logger.silly(`${this.constructor.name}.create.result`, response);
+    logger.silly(`${this.constructor.name}.create.response`, response);
+    logger.debug(`${this.constructor.name}.create.consumedCapacity`, response.ConsumedCapacity);
 
     return item as LocalFile;
   }
@@ -87,7 +92,8 @@ class DynamoDBRepository implements FileRepository {
 
     const response = await this.dynamoDB.send(command);
 
-    logger.silly(`${this.constructor.name}.find.result`, response);
+    logger.silly(`${this.constructor.name}.find.response`, response);
+    logger.debug(`${this.constructor.name}.find.consumedCapacity`, response.ConsumedCapacity);
 
     return response.Responses[this.tableName].map(item => unmarshall(item)) as LocalFile[];
   }
@@ -128,6 +134,7 @@ class DynamoDBRepository implements FileRepository {
     const response = await this.dynamoDB.send(command);
 
     logger.silly(`${this.constructor.name}.update.response`, response);
+    logger.debug(`${this.constructor.name}.update.consumedCapacity`, response.ConsumedCapacity);
 
     const item = unmarshall(response.Attributes);
 
@@ -169,6 +176,7 @@ class DynamoDBRepository implements FileRepository {
     const response = await this.dynamoDB.send(command);
 
     logger.silly(`${this.constructor.name}.delete.response`, response);
+    logger.debug(`${this.constructor.name}.delete.consumedCapacity`, response.ConsumedCapacity);
 
     if ('Item' in response === false) {
       return undefined;
