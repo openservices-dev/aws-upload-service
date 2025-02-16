@@ -161,7 +161,7 @@ class DynamoDBRepository implements FileRepository {
       },
       ReturnValues: 'ALL_OLD',
       ConditionExpression: user === null ? undefined : '#object.#key = :userId',
-      ExpressionAttributeNames: {
+      ExpressionAttributeNames: user === null ? undefined : {
         '#object': 'user',
         '#key': 'id',
       },
